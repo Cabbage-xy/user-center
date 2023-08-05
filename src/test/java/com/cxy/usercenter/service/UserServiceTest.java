@@ -8,9 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 
-import static org.junit.jupiter.api.Assertions.*;
+// import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+//@ComponentScan("com.cxy.usercenter")
+//@MapperScan("com.cxy.usercenter.mapper")
 class UserServiceTest {
     @Resource
     private UserService userService;

@@ -7,12 +7,18 @@ import com.cxy.usercenter.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 /**
-* @author 92127
-* @description 针对表【user】的数据库操作Service实现
-* @createDate 2023-08-04 21:19:08
-*/
+ * 用户服务实现类
+ *
+ * @auther cxy
+ */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 implements UserService{
 
+    @Override
+    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+        // 1.校验
+
+        return 0;
+    }
 }
