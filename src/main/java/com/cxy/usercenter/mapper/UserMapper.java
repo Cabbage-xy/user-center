@@ -1,7 +1,7 @@
 package com.cxy.usercenter.mapper;
 
 import com.cxy.usercenter.model.domain.User;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
 * @author 92127

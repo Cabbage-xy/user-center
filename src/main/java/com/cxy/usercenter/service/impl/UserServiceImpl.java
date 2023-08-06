@@ -1,6 +1,6 @@
 package com.cxy.usercenter.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cxy.usercenter.model.domain.User;
 import com.cxy.usercenter.service.UserService;
 import com.cxy.usercenter.mapper.UserMapper;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-implements UserService{
+        implements UserService {
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {

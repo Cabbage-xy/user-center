@@ -32,7 +32,7 @@ class UserServiceTest {
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
         user.setIsDelete(0);
-        boolean result =  userService.insert(user);
+        boolean result =  userService.save(user);
         Assertions.assertTrue(result);
     }
 }

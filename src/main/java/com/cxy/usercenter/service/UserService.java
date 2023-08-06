@@ -1,7 +1,7 @@
 package com.cxy.usercenter.service;
 
 import com.cxy.usercenter.model.domain.User;
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * 用户服务
