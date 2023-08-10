@@ -1,17 +1,16 @@
 package com.cxy.usercenter.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cxy.usercenter.model.domain.User;
 import com.cxy.usercenter.model.request.UserLoginRequest;
 import com.cxy.usercenter.model.request.UserRegisterRequest;
 import com.cxy.usercenter.service.UserService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户接口
@@ -56,5 +55,24 @@ public class UserController {
         }
 
         return userService.userLogin(userAccount, userPassword, request);
+    }
+
+    @GetMapping("/search")
+    public List<User> searchUsers(String username) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (StringUtils.isNotBlank(username)) {
+            queryWrapper.like("username", username);
+        }
+        return userService.list(queryWrapper);
+//        return userService.searchUsers(username);
+    }
+
+    @PostMapping("/delete")
+    public boolean deleteUser(@RequestBody long id) {
+        if (id <= 0) {
+            return false;
+        }
+        // 逻辑删除
+        return userService.removeById(id);
     }
 }
