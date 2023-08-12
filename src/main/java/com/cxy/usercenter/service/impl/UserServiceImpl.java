@@ -78,6 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserPassword(newPassword);
         boolean saveResult = this.save(user);
         if (!saveResult) {
+
             return -1;
         }
 
@@ -108,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 查询用户是否存在
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
-        queryWrapper.eq("userPassowrd", encryptPassword);
+        queryWrapper.eq("userPassword", encryptPassword);
         User user = userMapper.selectOne(queryWrapper);
         // 用户不存在
         if (user == null) {
