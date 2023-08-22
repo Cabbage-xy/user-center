@@ -13,7 +13,7 @@ class UserCenterApplicationTests {
 
     @Test
     void testDigest() throws NoSuchAlgorithmException {
-        String newPassword = DigestUtils.md5DigestAsHex(("salt" + "myPassword").getBytes(StandardCharsets.UTF_8));
+        String newPassword = DigestUtils.md5DigestAsHex(("ujustguess" + "12345678").getBytes(StandardCharsets.UTF_8));
         System.out.println(newPassword);
     }
 
