@@ -1,6 +1,9 @@
 package com.cxy.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cxy.usercenter.common.BaseResponse;
+import com.cxy.usercenter.common.ErrorCode;
+import com.cxy.usercenter.common.ResultUtils;
 import com.cxy.usercenter.model.domain.User;
 import com.cxy.usercenter.model.request.UserLoginRequest;
 import com.cxy.usercenter.model.request.UserRegisterRequest;
@@ -31,7 +34,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Long userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
             return null;
         }
@@ -43,12 +46,12 @@ public class UserController {
             return null;
         }
 
-        long id =  userService.userRegister(userAccount, userPassword, checkPassword);
-        return id;
+        long result =  userService.userRegister(userAccount, userPassword, checkPassword);
+        return ResultUtils.success(result);
     }
 
     @PostMapping("/login")
-    public User userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
+    public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (userLoginRequest == null) {
             return null;
         }
@@ -59,46 +62,50 @@ public class UserController {
             return null;
         }
 
-        return userService.userLogin(userAccount, userPassword, request);
+        User user = userService.userLogin(userAccount, userPassword, request);
+        return ResultUtils.success(user);
     }
 
     @PostMapping("/logout")
-    public Integer userLogout(HttpServletRequest request) {
+    public BaseResponse<Integer> userLogout(HttpServletRequest request) {
         if (request == null) {
             return null;
         }
-        return userService.userLogout(request);
+        int result = userService.userLogout(request);
+        return ResultUtils.success(result);
     }
 
     @GetMapping("/search")
-    public List<User> searchUsers(String username, HttpServletRequest request) {
+    public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request) {
         //仅管理员可查询
         if (!isAdmin(request)) {
-            return new ArrayList<>();
+            return ResultUtils.error(ErrorCode.NO_AUTH);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(username)) {
             queryWrapper.like("username", username);
         }
         List<User> userList = userService.list(queryWrapper);
-        return userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
+        List<User> resultList = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
+        return ResultUtils.success(resultList);
     }
 
     @PostMapping("/delete")
-    public boolean deleteUser(@RequestBody long id, HttpServletRequest request) {
+    public BaseResponse<Boolean> deleteUser(@RequestBody long id, HttpServletRequest request) {
         //仅管理员可查询
         if (!isAdmin(request)) {
-            return false;
+            return ResultUtils.error(ErrorCode.NO_AUTH);
         }
         if (id <= 0) {
-            return false;
+            return null;
         }
         // 逻辑删除
-        return userService.removeById(id);
+        boolean b = userService.removeById(id);
+        return ResultUtils.success(b);
     }
 
     @GetMapping("/current")
-    public User getCurrentUser(HttpServletRequest request) {
+    public BaseResponse<User> getCurrentUser(HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User)userObj;
         if (currentUser == null) {
@@ -107,7 +114,8 @@ public class UserController {
         long userId = currentUser.getId();
         // TODO 校验用户是否合法
         User user = userService.getById(userId);
-        return userService.getSafetyUser(user);
+        User safetyUser = userService.getSafetyUser(user);
+        return ResultUtils.success(safetyUser);
     }
 
     private boolean isAdmin(HttpServletRequest request) {

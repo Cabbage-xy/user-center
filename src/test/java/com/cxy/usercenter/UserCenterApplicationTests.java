@@ -7,6 +7,8 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @SpringBootTest
 class UserCenterApplicationTests {
@@ -19,6 +21,15 @@ class UserCenterApplicationTests {
 
     @Test
     void contextLoads() {
+        int[] ak = {123,22};
+        float[] aa = {12,3};
+//        long[] aj = new long[];
+//        aj = Arrays.copyOf(ak, ak.length, aj.getClass());
+        if ((Object)ak.getClass() == (Object)Object[].class) {
+
+        }
+        System.out.println(aa.getClass());
+        System.out.println(Object[].class);
     }
 
 }
