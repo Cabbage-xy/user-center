@@ -12,8 +12,14 @@ public enum ErrorCode {
     NO_AUTH(40101, "无权限", ""),
     NO_LOGIN(40100, "未登录", "");
 
+    /**
+     * 状态码
+     */
     private final int code;
 
+    /**
+     * 状态码描述（详情）
+     */
     private final String message;
 
     private final String description;
