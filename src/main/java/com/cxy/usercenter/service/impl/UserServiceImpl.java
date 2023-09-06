@@ -2,6 +2,8 @@ package com.cxy.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cxy.usercenter.common.ErrorCode;
+import com.cxy.usercenter.exception.BusinessException;
 import com.cxy.usercenter.model.domain.User;
 import com.cxy.usercenter.service.UserService;
 import com.cxy.usercenter.mapper.UserMapper;
@@ -42,22 +44,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
         // 1.校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         if (userAccount.length() < 4) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
         }
         if (userPassword.length() < 8 || checkPassword.length() < 8) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码少于八位");
         }
         // 账户不能包含特殊字符
         Matcher matcher = Pattern.compile(VALID_PATTERN).matcher(userAccount);
         if (matcher.find()) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号包含特殊字符");
         }
         // 密码和校验密码相同
         if (!userPassword.equals(checkPassword)) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不同");
         }
         // 查询数据库的内容放在其它校验规则后面
         // 账户不能重复
@@ -65,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("userAccount", userAccount);
         long count = this.count(queryWrapper);
         if (count > 0) {
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "该用户名已注册");
         }
 
         // 2. 加密
@@ -77,7 +79,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserPassword(newPassword);
         boolean saveResult = this.save(user);
         if (!saveResult) {
-
             return -1;
         }
 

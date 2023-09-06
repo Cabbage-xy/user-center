@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cxy.usercenter.common.BaseResponse;
 import com.cxy.usercenter.common.ErrorCode;
 import com.cxy.usercenter.common.ResultUtils;
+import com.cxy.usercenter.exception.BusinessException;
 import com.cxy.usercenter.model.domain.User;
 import com.cxy.usercenter.model.request.UserLoginRequest;
 import com.cxy.usercenter.model.request.UserRegisterRequest;
 import com.cxy.usercenter.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.builder.BuilderException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -36,7 +38,8 @@ public class UserController {
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
-            return null;
+//            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         String userAccount = userRegisterRequest.getUserAccount();
